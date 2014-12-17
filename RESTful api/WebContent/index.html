@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Form to create a new user</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<script lang="javascript">
+			var xmlhttp;
+			
+			function init(){
+				xmlhttp = new XMLHttpRequest();
+			}
+			
+			function getUser(){
+				var userId = document.getElementById("userId");
+				var url = "http://localhost:8080/backendAssignment02A/rest/userService/" + userId.value;
+				
+				xmlhttp.open('GET', url, true);
+				xmlhttp.send();
+
+				xmlhttp.onreadystatechange = function(){
+					if(xmlhttp.readyState == 4){
+						if(xmlhttp.status == 200){
+							var object =  eval ( "(" + xmlhttp.responseText + ")" );
+							document.getElementById("valueOutput").value= object.firstname + " " + object.lastname;
+						}else{
+							alert("Coudn't found user with specified id ->" + xmlhttp.responseText);
+						}
+					}
+				};
+			}
+		</script>
+	</head>
+	<body onload="init()">
+		<form action="../backendAssignment02A/rest/userService" method="POST">
+			<label for="firstname">First name</label>
+			<input name="firstname" style="margin-left: 10px; margin-bottom: 10px;"/>
+			<br/>
+			<label for="lastname">Last name</label>
+			<input name="lastname" style="margin-left: 12px; margin-bottom: 10px;"/>
+			<br/>
+			<label for="email">Email</label>
+			<input name="email" style="margin-left: 40px; margin-bottom: 10px;"/>
+			<br/>
+			<label for="phonenumber">Phone Number</label>
+			<input name="phonenumber" style="margin-left: 10px; margin-bottom: 10px;"/>
+			<br/>
+			<input type="submit" value="Submit" />
+			
+			<br/>
+		</form>
+		<form>
+			<br/>
+			<label for="userId">Insert user id for Search : </label><input id="userId" size="10" style="margin-left:10px;"/> 
+			<input type="button" value="Search" onclick="getUser()" />
+			<br/>
+			<br/>
+			<input type="text" id="valueOutput" size="50"  style="display: inline"/>
+		</form>
+	</body>
+</html>
